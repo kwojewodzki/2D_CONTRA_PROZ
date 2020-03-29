@@ -15,7 +15,7 @@
  </layer>
  <objectgroup id="11" name="ground">
   <object id="45" x="32" y="96" width="16"/>
-  <object id="46" x="32" y="96" width="464" height="15"/>
+  <object id="46" x="32" y="96" width="464"/>
   <object id="48" x="416" y="128" width="64"/>
   <object id="49" x="256" y="160" width="32"/>
   <object id="50" x="160" y="128" width="96"/>
@@ -23,7 +23,7 @@
   <object id="52" x="352" y="160" width="32"/>
   <object id="53" x="608" y="192" width="64"/>
   <object id="54" x="640" y="144" width="96"/>
-  <object id="57" x="490.5" y="96" width="277.5" height="15"/>
+  <object id="57" x="490.5" y="96" width="277.5"/>
   <object id="58" x="896" y="96" width="160"/>
   <object id="59" x="1184" y="96" width="224"/>
   <object id="72" x="1728" y="192" width="192"/>
@@ -72,7 +72,6 @@
   <object id="71" x="1728" y="192" height="16"/>
   <object id="108" x="3376" y="0" height="208"/>
   <object id="109" x="3376" y="-240" height="240"/>
-  <object id="110" x="3024.5" y="-73.5" height="1"/>
  </objectgroup>
  <objectgroup id="12" name="bridge">
   <object id="64" x="768" y="96" width="128" height="10"/>

@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kwojewod.contra.Contra;
 
 import java.awt.*;
 
-public class Hud {
+public class Hud implements Disposable {
 
     public Stage stage;
     private Viewport viewport;
@@ -24,10 +25,10 @@ public class Hud {
 
     Label countdownLabel;
     private static Label scoreLabel;
-    Label timeLabel;
-    Label levelLabel;
-    Label worldLabel;
-    Label contraLabel;
+    private Label timeLabel;
+    private Label levelLabel;
+    private Label worldLabel;
+    private Label contraLabel;
 
     public Hud(SpriteBatch sb){
         worldTimer = 300;
@@ -67,5 +68,10 @@ public class Hud {
     public static void addScore(int value){
         score += value;
         scoreLabel.setText(String.format("%06d", score));
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }
