@@ -19,19 +19,19 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    private Integer worldTimer;
+    private Integer lifeCounter;
     private float timeCount;
     private static Integer score;
 
     Label countdownLabel;
     private static Label scoreLabel;
-    private Label timeLabel;
+    private Label livesLabel;
     private Label levelLabel;
     private Label worldLabel;
     private Label contraLabel;
 
     public Hud(SpriteBatch sb){
-        worldTimer = 300;
+        lifeCounter = 3;
         timeCount = 0;
         score = 0;
 
@@ -45,9 +45,9 @@ public class Hud implements Disposable {
         table.setFillParent(true);
 
         //Setting labels
-        countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        countdownLabel = new Label(String.format("%03d", lifeCounter), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        livesLabel = new Label("LIVES", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("WORLD", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         contraLabel = new Label("POINTS", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -56,7 +56,7 @@ public class Hud implements Disposable {
         //Adding labels to table
         table.add(contraLabel).expandX().padTop(5);
         table.add(worldLabel).expandX().padTop(5);
-        table.add(timeLabel).expandX().padTop(5);
+        table.add(livesLabel).expandX().padTop(5);
         table.row();
         table.add(scoreLabel).expandX();
         table.add(levelLabel).expandX();

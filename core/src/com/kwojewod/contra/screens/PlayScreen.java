@@ -61,7 +61,7 @@ public class PlayScreen implements Screen {
 
 		//Loading and rendering map
 		maploader = new TmxMapLoader();
-		map = maploader.load("mapContra.tmx");
+		map = maploader.load("lvl1Contra.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 /Contra.PPM);
 		gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
