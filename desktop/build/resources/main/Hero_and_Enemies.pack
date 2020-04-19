@@ -10,10 +10,10 @@ NES_contra_enemies
   orig: 330, 644
   offset: 0, 0
   index: -1
-Heroes
+NES_contra_heroes
   rotate: false
-  xy: 333, 117
-  size: 416, 528
-  orig: 416, 528
+  xy: 333, 176
+  size: 253, 469
+  orig: 253, 469
   offset: 0, 0
   index: -1

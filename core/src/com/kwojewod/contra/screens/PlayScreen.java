@@ -85,7 +85,7 @@ public class PlayScreen implements Screen {
 	//TODO make handleInput usable
 	public void handleInput(float dt){
 		//Checking if key is being pressed
-		if(Gdx.input.isKeyJustPressed(Input.Keys.UP) ) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
 			if(player.b2Body.getLinearVelocity().y == 0 || isGod)
 			player.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
 
