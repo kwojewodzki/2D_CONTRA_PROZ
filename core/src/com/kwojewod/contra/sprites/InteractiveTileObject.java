@@ -13,6 +13,7 @@ public abstract class InteractiveTileObject {
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
+    protected short category;
 
     protected Fixture fixture;
 
@@ -33,9 +34,20 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth() / 2 / Contra.PPM, bounds.getHeight() / 2 / Contra.PPM);
         fdef.shape = shape;
+        body.createFixture(fdef).setUserData("Ground");
         fixture = body.createFixture(fdef);
+
     }
 
     public abstract void onHeadHit();
-
+    public abstract void onFeet();
+    public void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fixture.setFilterData(filter);
+        category = filterBit;
+    }
+    public short whatFilter(){
+        return category;
+    }
 }

@@ -1,6 +1,7 @@
 package com.kwojewod.contra.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,9 +11,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.kwojewod.contra.Contra;
 import com.kwojewod.contra.screens.PlayScreen;
+import com.sun.javafx.geom.Edge;
 
 public class Player extends Sprite {
-    public enum State {FALLING, JUMPING, STANDING, RUNNING};
+    public boolean playerIsDead;
+    public boolean shooting;
+    public enum State {FALLING, JUMPING, STANDING, RUNNING, LAYING};
     public State currentState;
     public State previousState;
     public World world;
@@ -20,10 +24,13 @@ public class Player extends Sprite {
     private TextureRegion heroStand;
     private Animation<TextureRegion> heroRun;
     private  Animation<TextureRegion> heroJump;
-    private Animation<TextureRegion> heroStandInWater;
+    private TextureRegion heroDown;
     private float stateTimer;
     private  boolean runningRight;
     private int widthOfSprite;
+    public boolean isGrounded;
+    private Array<Bullet> bullets;
+    private PlayScreen screen;
 
     public Player(World world, PlayScreen screen){
         super(screen.getAtlas().findRegion("NES_contra_heroes"));
@@ -37,8 +44,7 @@ public class Player extends Sprite {
         //TODO Dodać reszte animacji
         loadHeroRun(frames);
         loadHeroJump(frames);
-
-
+        heroDown = new TextureRegion(getTexture(), 417, 225, 31, 15);
         heroStand = new TextureRegion(getTexture(),335,207,22,35);
         definePlayer();
         setBounds(0,0, 22/ Contra.PPM,32/ Contra.PPM );
@@ -95,6 +101,9 @@ public class Player extends Sprite {
             case RUNNING:
                 region = heroRun.getKeyFrame(stateTimer, true);
                 break;
+            case LAYING:
+                region = heroDown;
+                break;
             case FALLING:
             case STANDING:
             default:
@@ -122,6 +131,8 @@ public class Player extends Sprite {
             return State.FALLING;
         else if(b2Body.getLinearVelocity().x != 0)
             return State.RUNNING;
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            return State.LAYING;
         else
             return State.STANDING;
     }
@@ -135,17 +146,33 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(10 / Contra.PPM);
+        fdef.filter.categoryBits = Contra.PLAYER_BIT;
+        fdef.filter.maskBits = Contra.DEFAULT_BIT | Contra.GROUND_BIT;
 
         fdef.shape = shape;
-        b2Body.createFixture(fdef);
+        b2Body.createFixture(fdef).setUserData("player");
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2/Contra.PPM, 18/Contra.PPM), new Vector2(2/Contra.PPM, 18/Contra.PPM));
+        head.set(new Vector2(-2/Contra.PPM, 16/Contra.PPM), new Vector2(2/Contra.PPM, 16/Contra.PPM));
         fdef.shape = head;
         fdef.isSensor = true;
 
         b2Body.createFixture(fdef).setUserData("head");
+        EdgeShape feet = new EdgeShape();
+        feet.set(new Vector2(-4/Contra.PPM, -18/Contra.PPM), new Vector2(4/Contra.PPM, -18/Contra.PPM));
+        fdef.shape = feet;
+        fdef.isSensor = true;
+        b2Body.createFixture(fdef).setUserData("feet");
+    }
+    public void fire(){
+        bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight));
     }
 
+    public boolean isDead(){
+        return playerIsDead;
+    }
+    public float getStateTimer(){
+        return stateTimer;
+    }
 
 }

@@ -16,14 +16,15 @@ import com.kwojewod.contra.Contra;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.kwojewod.contra.Scenes.Hud;
+import com.kwojewod.contra.sprites.Bullet;
 import com.kwojewod.contra.sprites.Player;
 import com.kwojewod.contra.tools.B2WorldCreator;
 import com.kwojewod.contra.tools.WorldContactListener;
 
+import java.util.ArrayList;
+
 public class PlayScreen implements Screen {
-	private boolean isGod = false;
-
-
+	 ArrayList<Bullet> bullets;
 	//Game variable
 	private Contra game;
 	private TextureAtlas atlas;
@@ -48,6 +49,7 @@ public class PlayScreen implements Screen {
 	private Box2DDebugRenderer b2dr;
 
 	public PlayScreen(Contra game) {
+		bullets = new ArrayList<Bullet>();
 		/*
 		Constructor for Contra class
 		Initializing game, camera and loading hud
@@ -86,7 +88,7 @@ public class PlayScreen implements Screen {
 	public void handleInput(float dt){
 		//Checking if key is being pressed
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
-			if(player.b2Body.getLinearVelocity().y == 0 || isGod)
+			if(player.b2Body.getLinearVelocity().y == 0)
 			player.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
 
 		}
@@ -95,25 +97,14 @@ public class PlayScreen implements Screen {
 
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2Body.getLinearVelocity().x >= -2)
 			player.b2Body.applyLinearImpulse(new Vector2(-0.1f,0),player.b2Body.getWorldCenter(), true);
-		if(Gdx.input.isKeyPressed(Input.Keys.G))
-			if(Gdx.input.isKeyPressed(Input.Keys.O))
-				if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-					if(!isGod) {
-						world.setGravity(new Vector2(0, 0));
-						isGod = true;
-					}
-					else {
-						isGod = false;
-						world.setGravity(new Vector2(0, -10));
-					}
-				}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) ) {
-			if(player.b2Body.getLinearVelocity().y == 0 || isGod)
-				player.b2Body.applyLinearImpulse(new Vector2(0, -4), player.b2Body.getWorldCenter(), true);
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+			if(player.b2Body.getLinearVelocity().y == 0)
+			player.b2Body.setLinearVelocity(new Vector2(0,0));
+			//player.b2Body.applyLinearImpulse(new Vector2(0, -0.001f), player.b2Body.getWorldCenter(), true);
 		}
-
-
-
+		if(Gdx.input.isKeyPressed(Input.Keys.X)){
+			//player.fire();
+		}
 
 
 	}
@@ -186,6 +177,9 @@ public class PlayScreen implements Screen {
 	public void hide() {
 		// TODO Auto-generated method stub
 		
+	}
+	public World getWorld(){
+		return world;
 	}
 
 	@Override
