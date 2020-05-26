@@ -165,7 +165,7 @@ public class Player extends Sprite {
         b2Body.createFixture(fdef).setUserData("feet");
     }
     public void fire(){
-        bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight));
+       // bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight));
     }
 
     public boolean isDead(){
