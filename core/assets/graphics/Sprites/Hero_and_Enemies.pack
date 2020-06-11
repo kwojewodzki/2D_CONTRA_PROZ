@@ -1,0 +1,19 @@
+
+Hero_and_Enemies.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+NES_contra_enemies
+  rotate: false
+  xy: 1, 1
+  size: 330, 644
+  orig: 330, 644
+  offset: 0, 0
+  index: -1
+NES_contra_heroes
+  rotate: false
+  xy: 333, 176
+  size: 253, 469
+  orig: 253, 469
+  offset: 0, 0
+  index: -1

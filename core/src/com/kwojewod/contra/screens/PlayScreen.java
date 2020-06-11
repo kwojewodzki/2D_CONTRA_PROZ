@@ -4,6 +4,7 @@ package com.kwojewod.contra.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -48,13 +49,15 @@ public class PlayScreen implements Screen {
 	private World world;
 	private Box2DDebugRenderer b2dr;
 
+	private Music music;
+
 	public PlayScreen(Contra game) {
 		bullets = new ArrayList<Bullet>();
 		/*
 		Constructor for Contra class
 		Initializing game, camera and loading hud
 		*/
-		atlas = new TextureAtlas("Hero_and_Enemies.pack");
+		atlas = new TextureAtlas("graphics/Sprites/Hero_and_Enemies.pack");
 
 		this.game = game;
 		gamecam = new OrthographicCamera();
@@ -63,7 +66,7 @@ public class PlayScreen implements Screen {
 
 		//Loading and rendering map
 		maploader = new TmxMapLoader();
-		map = maploader.load("lvl1Contra.tmx");
+		map = maploader.load("graphics/Map/lvl1Contra.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 /Contra.PPM);
 		gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -77,6 +80,11 @@ public class PlayScreen implements Screen {
 		player = new Player(world, this);
 
 		world.setContactListener(new WorldContactListener());
+
+		music = Contra.manager.get("audio/music/lvl1.mp3", Music.class);
+		music.setVolume((float) 0.1);
+		music.setLooping(true);
+		music.play();
 
 	}
 
@@ -102,8 +110,8 @@ public class PlayScreen implements Screen {
 			player.b2Body.setLinearVelocity(new Vector2(0,0));
 			//player.b2Body.applyLinearImpulse(new Vector2(0, -0.001f), player.b2Body.getWorldCenter(), true);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.X)){
-			//Gdx.app.exit();
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+			Gdx.app.exit();
 		}
 
 
@@ -117,6 +125,7 @@ public class PlayScreen implements Screen {
 		world.step(1/60f, 6, 2);
 
 		player.update(dt);
+		hud.update(dt);
 
 		gamecam.position.x = player.b2Body.getPosition().x;
 

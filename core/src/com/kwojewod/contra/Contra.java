@@ -1,8 +1,10 @@
 package com.kwojewod.contra;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.kwojewod.contra.screens.PlayScreen;
+import com.kwojewod.contra.screens.MainMenu;
 
 /*
 @
@@ -22,18 +24,34 @@ public class Contra extends Game {
 	public static final short GROUND_BIT = 4;
 	public static final short BULLET_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
-
+	public static AssetManager manager;
 	public SpriteBatch batch;
 
 	@Override
-	public void create () {
+	public void create() {
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		manager = new AssetManager();
+		manager.load("audio/music/lvl1.mp3", Music.class);
+		manager.load("audio/music/main_menu.mp3", Music.class);
+		manager.load("audio/sounds/death.mp3", Music.class);
+		manager.load("audio/sounds/game-over.mp3", Music.class);
+		manager.load("audio/sounds/machine-gun.mp3", Music.class);
+
+		manager.finishLoading();
+		setScreen(new MainMenu(this));
 	}
 
 	@Override
-	public void render () {
+	public void render() {
+
 		super.render();
+		manager.update();
 	}
-	
+
+
+	public void dispose() {
+		super.dispose();
+		batch.dispose();
+		manager.dispose();
+	}
 }
