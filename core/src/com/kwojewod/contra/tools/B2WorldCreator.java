@@ -20,7 +20,6 @@ public class B2WorldCreator {
         Body body;
 
         //Create ground bodies/fixtures
-        //TODO make jumping from underneath on rocks
         for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -57,7 +56,7 @@ public class B2WorldCreator {
         }
         //Create Bridges bodies/fixtures
         for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle(); //TODO make brides colapse
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             new Bridge(world, map, rect);
         }

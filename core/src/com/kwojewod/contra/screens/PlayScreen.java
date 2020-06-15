@@ -95,7 +95,6 @@ public class PlayScreen implements Screen {
 		return atlas;
 	}
 
-	//TODO make handleInput usable
 	public void handleInput(float dt) {
 		/*
 

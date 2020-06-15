@@ -40,7 +40,6 @@ public class Player2 extends Sprite {
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        //TODO Dodać reszte animacji
         loadHeroRun(frames);
         loadHeroJump(frames);
         heroDown = new TextureRegion(getTexture(), 417, 450, 31, 15);
