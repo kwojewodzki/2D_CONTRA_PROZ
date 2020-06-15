@@ -15,7 +15,10 @@ import com.sun.javafx.geom.Edge;
 
 public class Player extends Sprite {
     public boolean playerIsDead;
+    public boolean onPlatform;
     public boolean shooting;
+
+
     public enum State {FALLING, JUMPING, STANDING, RUNNING, LAYING};
     public State currentState;
     public State previousState;
@@ -68,6 +71,7 @@ public class Player extends Sprite {
 
         }
         heroRun = new Animation<TextureRegion>(0.1f, frames);
+        playerIsDead = false;
         frames.clear();
     }
     private  void loadHeroJump (Array<TextureRegion> frames){
@@ -87,6 +91,9 @@ public class Player extends Sprite {
 
     public void update(float dt){
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
+        if(b2Body.getPosition().y < 0){
+            isDead();
+        }
         setRegion(getFrame(dt));
     }
 
@@ -139,19 +146,21 @@ public class Player extends Sprite {
 
     public void definePlayer(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / Contra.PPM, 32 / Contra.PPM);
+        bdef.position.set(100 / Contra.PPM, 130 / Contra.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2Body = world.createBody(bdef);
 
-        FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
+        FixtureDef fdef = new FixtureDef();
+
         shape.setRadius(10 / Contra.PPM);
         fdef.filter.categoryBits = Contra.PLAYER_BIT;
-        fdef.filter.maskBits = Contra.DEFAULT_BIT | Contra.GROUND_BIT;
+        fdef.filter.maskBits = Contra.DEFAULT_BIT |
+                Contra.GROUND_BIT |
+                Contra.DEAD_BIT;
 
         fdef.shape = shape;
-        b2Body.createFixture(fdef).setUserData("player");
-
+        b2Body.createFixture(fdef).setUserData("player1");
         EdgeShape head = new EdgeShape();
         head.set(new Vector2(-2/Contra.PPM, 16/Contra.PPM), new Vector2(2/Contra.PPM, 16/Contra.PPM));
         fdef.shape = head;
@@ -159,7 +168,7 @@ public class Player extends Sprite {
 
         b2Body.createFixture(fdef).setUserData("head");
         EdgeShape feet = new EdgeShape();
-        feet.set(new Vector2(-4/Contra.PPM, -18/Contra.PPM), new Vector2(4/Contra.PPM, -18/Contra.PPM));
+        feet.set(new Vector2(-4/Contra.PPM, -10/Contra.PPM), new Vector2(4/Contra.PPM, -10/Contra.PPM));
         fdef.shape = feet;
         fdef.isSensor = true;
         b2Body.createFixture(fdef).setUserData("feet");
@@ -168,8 +177,9 @@ public class Player extends Sprite {
        // bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight));
     }
 
-    public boolean isDead(){
-        return playerIsDead;
+    public void isDead(){
+        playerIsDead = true;
+
     }
     public float getStateTimer(){
         return stateTimer;

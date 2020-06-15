@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.kwojewod.contra.Scenes.Hud;
 import com.kwojewod.contra.sprites.Bullet;
 import com.kwojewod.contra.sprites.Player;
+import com.kwojewod.contra.sprites.Player2;
 import com.kwojewod.contra.tools.B2WorldCreator;
 import com.kwojewod.contra.tools.WorldContactListener;
 
@@ -26,12 +27,14 @@ import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
 	 ArrayList<Bullet> bullets;
+	 boolean isMultiplayer;
 	//Game variable
 	private Contra game;
 	private TextureAtlas atlas;
 
 	//player class object
 	private Player player;
+	private Player2 player2;
 
 	//Variables for camera
 	private OrthographicCamera gamecam;
@@ -51,8 +54,9 @@ public class PlayScreen implements Screen {
 
 	private Music music;
 
-	public PlayScreen(Contra game) {
+	public PlayScreen(Contra game, boolean multi) {
 		bullets = new ArrayList<Bullet>();
+		isMultiplayer = multi;
 		/*
 		Constructor for Contra class
 		Initializing game, camera and loading hud
@@ -78,6 +82,8 @@ public class PlayScreen implements Screen {
 
 		//Creating player
 		player = new Player(world, this);
+		if(isMultiplayer)
+		player2 = new Player2(world, this);
 
 		world.setContactListener(new WorldContactListener());
 
@@ -85,7 +91,6 @@ public class PlayScreen implements Screen {
 		music.setVolume((float) 0.1);
 		music.setLooping(true);
 		music.play();
-
 	}
 
 	public TextureAtlas getAtlas(){
@@ -93,23 +98,79 @@ public class PlayScreen implements Screen {
 	}
 
 	//TODO make handleInput usable
-	public void handleInput(float dt){
-		//Checking if key is being pressed
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
-			if(player.b2Body.getLinearVelocity().y == 0)
-			player.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
+	public void handleInput(float dt) {
+		/*
+
+				Player 1 input handling in SP
+
+		 */
+
+		if(!isMultiplayer){
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				if (player.b2Body.getLinearVelocity().y == 0)
+					player.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
+
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2Body.getLinearVelocity().x <= 2)
+				player.b2Body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2Body.getWorldCenter(), true);
+
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2Body.getLinearVelocity().x >= -2)
+				player.b2Body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2Body.getWorldCenter(), true);
+			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+				if (player.b2Body.getLinearVelocity().y == 0)
+					player.b2Body.setLinearVelocity(new Vector2(0, 0));
+			}
+	}else {
+			/*
+			Player 1 input handling in MP
+
+			 */
+
+
+			if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+				if (player.b2Body.getLinearVelocity().y == 0)
+					player.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
+
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6) && player.b2Body.getLinearVelocity().x <= 2)
+				player.b2Body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2Body.getWorldCenter(), true);
+
+			if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4) && player.b2Body.getLinearVelocity().x >= -2)
+				player.b2Body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2Body.getWorldCenter(), true);
+			if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
+				if (player.b2Body.getLinearVelocity().y == 0)
+					player.b2Body.setLinearVelocity(new Vector2(0, 0));
+			}
+
+
+
+			/*
+
+			player 2 input handling
+
+		 */
+
+
+			if (Gdx.input.isKeyPressed(Input.Keys.D) && player2.b2Body.getLinearVelocity().x <= 2)
+				player2.b2Body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2Body.getWorldCenter(), true);
+
+			if (Gdx.input.isKeyPressed(Input.Keys.A) && player2.b2Body.getLinearVelocity().x >= -2)
+				player2.b2Body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2Body.getWorldCenter(), true);
+
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				if (player2.b2Body.getLinearVelocity().y == 0)
+					player2.b2Body.setLinearVelocity(new Vector2(0, 0));
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.G)){
+				if (player2.b2Body.getLinearVelocity().y == 0)
+					player2.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
+			}
 
 		}
-			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2Body.getLinearVelocity().x <= 2)
-			player.b2Body.applyLinearImpulse(new Vector2(0.1f,0),player.b2Body.getWorldCenter(), true);
+		/*
+			Handling the rest
+		 */
 
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2Body.getLinearVelocity().x >= -2)
-			player.b2Body.applyLinearImpulse(new Vector2(-0.1f,0),player.b2Body.getWorldCenter(), true);
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			if(player.b2Body.getLinearVelocity().y == 0)
-			player.b2Body.setLinearVelocity(new Vector2(0,0));
-			//player.b2Body.applyLinearImpulse(new Vector2(0, -0.001f), player.b2Body.getWorldCenter(), true);
-		}
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
 			Gdx.app.exit();
 		}
@@ -121,13 +182,20 @@ public class PlayScreen implements Screen {
 	public void update(float dt){
 		//updating camera position and rendering map that is visible
 		handleInput(dt);
-
 		world.step(1/60f, 6, 2);
 
 		player.update(dt);
+		if(isMultiplayer)
+			player2.update(dt);
 		hud.update(dt);
-
-		gamecam.position.x = player.b2Body.getPosition().x;
+		if(isMultiplayer) {
+			if (player.b2Body.getPosition().x >= player2.b2Body.getPosition().x) {
+				gamecam.position.x = player.b2Body.getPosition().x;
+			} else {
+				gamecam.position.x = player2.b2Body.getPosition().x;
+			}
+		}else
+			gamecam.position.x = player.b2Body.getPosition().x;
 
 		gamecam.update();
 		renderer.setView(gamecam);
@@ -142,6 +210,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		update(delta);
+
 		//Clearing screen
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -154,12 +223,16 @@ public class PlayScreen implements Screen {
 
 		game.batch.setProjectionMatrix(gamecam.combined);
 		game.batch.begin();
+
 		player.draw(game.batch);
+		if(isMultiplayer)
+			player2.draw(game.batch);
 		game.batch.end();
 
 		//Drawing on screen
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
+		seeIfDead();
 	}
 
 	@Override
@@ -193,11 +266,29 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		map.dispose();
 		renderer.dispose();
 		world.dispose();
 		b2dr.dispose();
+		hud.dispose();
+	}
+	private void seeIfDead(){
+		if(player.playerIsDead) {
+			music.stop();
+			//player2.playerIsDead = false;
+			player.playerIsDead = false;
+			game.setScreen(new GameOverScreen(game));
+			dispose();
+		}if(isMultiplayer){
+			if(player.playerIsDead){
+				music.stop();
+				player2.playerIsDead = false;
+				game.setScreen(new GameOverScreen(game));
+				dispose();
+		}
+
+			//game.setScreen(new MainMenu(game));
+		}
 	}
 
 }

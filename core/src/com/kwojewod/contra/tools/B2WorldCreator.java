@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.kwojewod.contra.Contra;
 import com.kwojewod.contra.sprites.Bridge;
+import com.kwojewod.contra.sprites.DeathPit;
 import com.kwojewod.contra.sprites.Ground;
 import com.kwojewod.contra.sprites.Water;
 
@@ -23,6 +24,7 @@ public class B2WorldCreator {
         for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
+
             new Ground(world, map, rect);
         }
 
@@ -37,15 +39,8 @@ public class B2WorldCreator {
         for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Contra.PPM, (rect.getY() + rect.getHeight() / 2) / Contra.PPM);
+            new DeathPit(world, map, rect);
 
-            body = world.createBody(bdef);
-
-
-            shape.setAsBox(rect.getWidth() / 2 / Contra.PPM, rect.getHeight() / 2 / Contra.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
         }
         for (MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();

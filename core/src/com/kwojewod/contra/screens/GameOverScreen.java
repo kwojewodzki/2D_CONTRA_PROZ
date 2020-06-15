@@ -2,10 +2,13 @@ package com.kwojewod.contra.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,12 +19,20 @@ import com.kwojewod.contra.Contra;
 
 
 public class GameOverScreen implements Screen {
+    Contra game;
+
+    private Music music;
     private Viewport viewport;
     private Stage stage;
 
-    private Game game;
 
-    public GameOverScreen(Game game){
+    public GameOverScreen(Contra game) {
+
+        music = Contra.manager.get("audio/music/game-over.mp3", Music.class);
+        music.setVolume((float) 0.1);
+        music.setLooping(true);
+        music.play();
+
         this.game = game;
         viewport = new FitViewport(Contra.V_WIDTH, Contra.V_HIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Contra) game).batch);
@@ -32,10 +43,15 @@ public class GameOverScreen implements Screen {
         table.center();
         table.setFillParent(true);
 
-        Label welcomeLabel = new Label("You died", font);
-        table.add(welcomeLabel).expandX();
+        Label gameOverLabel = new Label("Nie zyjesz", font);
+        Label playAgainLabel = new Label("Kliknij zeby wyjsc z gry", font);
+
+        table.add(gameOverLabel).expandX();
+        table.row();
+        table.add(playAgainLabel).expandX().padTop(10f);
 
         stage.addActor(table);
+
     }
 
     @Override
@@ -45,10 +61,17 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(0,0,0,1);
+
+        if (Gdx.input.justTouched()) {
+           // game.setScreen(new MainMenu(game));
+            Gdx.app.exit();
+            dispose();
+        }
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
+
 
     @Override
     public void resize(int i, int i1) {

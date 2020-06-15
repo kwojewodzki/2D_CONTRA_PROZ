@@ -17,8 +17,11 @@ public class MainMenu implements Screen {
     private Texture activeExit;
     private Texture inactiveExit;
     private Texture inactiveTutorial;
+    private Texture title;
+    private Texture layout;
     private Texture activeTutorial;
     private Music music;
+
 
     public MainMenu(Contra game){
         this.game = game;
@@ -30,6 +33,8 @@ public class MainMenu implements Screen {
         inactive2Player = new Texture("graphics/Menus_Texture/2_players_inactive.png");
         inactiveTutorial = new Texture("graphics/Menus_Texture/tutorial_inactive.png");
         activeTutorial = new Texture("graphics/Menus_Texture/tutorial_active.png");
+        title = new Texture("graphics/Menus_Texture/Name.png");
+        layout = new Texture("graphics/Menus_Texture/Layout.png");
 
        // if(music.isPlaying()) {
             music = Contra.manager.get("audio/music/main_menu.mp3", Music.class);
@@ -54,11 +59,14 @@ public class MainMenu implements Screen {
 
         //Drawing single player button
 
+        game.batch.draw(title,640 - 330, 720 - 230, 600, 230);
+        game.batch.draw(layout, 700, 120,580,450);
+
         if((Gdx.input.getX()>=640-100 && Gdx.input.getX()<=740-100) && (Gdx.input.getY() >= 250 && Gdx.input.getY() <= 300)) {
             game.batch.draw(active1Player, 640-100, 420, 100, 50);
             if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                 music.stop();
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new PlayScreen(game, false));
             }
 
         }else {
@@ -69,7 +77,10 @@ public class MainMenu implements Screen {
 
         if((Gdx.input.getX()>=640-100 && Gdx.input.getX()<=740-100) && (Gdx.input.getY() >= 350 && Gdx.input.getY() <= 400)) {
             game.batch.draw(active2Player, 640 - 100, 320, 100, 50);
-
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                music.stop();
+                game.setScreen(new PlayScreen(game, true));
+            }
         }else {
             game.batch.draw(inactive2Player, 640 - 100, 320, 100, 50);
         }
@@ -127,6 +138,5 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }

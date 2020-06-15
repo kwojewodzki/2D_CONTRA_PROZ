@@ -24,6 +24,7 @@ public class Contra extends Game {
 	public static final short GROUND_BIT = 4;
 	public static final short BULLET_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
+	public static final short DEAD_BIT = 32;
 	public static AssetManager manager;
 	public SpriteBatch batch;
 
@@ -34,7 +35,7 @@ public class Contra extends Game {
 		manager.load("audio/music/lvl1.mp3", Music.class);
 		manager.load("audio/music/main_menu.mp3", Music.class);
 		manager.load("audio/sounds/death.mp3", Music.class);
-		manager.load("audio/sounds/game-over.mp3", Music.class);
+		manager.load("audio/music/game-over.mp3", Music.class);
 		manager.load("audio/sounds/machine-gun.mp3", Music.class);
 
 		manager.finishLoading();

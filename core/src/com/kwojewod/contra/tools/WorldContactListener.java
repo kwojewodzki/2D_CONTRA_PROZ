@@ -1,68 +1,49 @@
 package com.kwojewod.contra.tools;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.kwojewod.contra.Contra;
 import com.kwojewod.contra.sprites.InteractiveTileObject;
 import com.kwojewod.contra.sprites.Player;
 
 
 public class WorldContactListener implements ContactListener {
-    Player player;
+
     @Override
-    public void beginContact(Contact contact) {
+    public void beginContact(Contact contact){
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
-
-
-        if (fixA.getUserData() == "player" || fixB.getUserData() == "player") {
-            Fixture head = fixA.getUserData() == "player" ? fixA : fixB;
-            Fixture object1 = head == fixA ? fixB : fixA;
-
-            if (object1.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object1.getUserData().getClass())) {
-                ((InteractiveTileObject) object1.getUserData()).onHeadHit();
-                contact.setEnabled(false);
-            }
-
-        }
-        if (fixA.getUserData() == "player" || fixB.getUserData() == "player") {
-            Fixture feet = fixA.getUserData() == "player" ? fixA : fixB;
-            Fixture object2 = feet == fixA ? fixB : fixA;
-
-            if (object2.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object2.getUserData().getClass())) {
-                ((InteractiveTileObject) object2.getUserData()).onFeet();
-            }
-        }
     }
     @Override
     public void endContact(Contact contact) {
+       // player.onPlatform = false;
 
+        //contact.setEnabled(true);
 
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-       /* Fixture fixA = contact.getFixtureA();
+        Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
-        if (fixA.getUserData() == "player" || fixB.getUserData() == "player") {
-            Fixture head = fixA.getUserData() == "player" ? fixA : fixB;
-            Fixture object2 = head == fixA ? fixB : fixA;
+        float velocity = 0;
 
-            if (contact.getFixtureA().getBody().getUserData() == "ground" && contact.getFixtureB().getUserData() == "player") {
-                ((InteractiveTileObject) object2.getUserData()).onHeadHit();
-                contact.setEnabled(false);
+        if ((fixA.getUserData()=="Ground" && fixB.getUserData()=="player")||(fixA.getUserData()=="player" && fixB.getUserData()=="Ground")) {
+            if (fixA.getUserData() == "Ground") {
+                // determining y positions
+                velocity = fixB.getBody().getLinearVelocity().y;
+            }
+            if( fixA.getUserData() == "player" ){
+                    // determining y positions
+                    velocity = fixA.getBody().getLinearVelocity().y;
+
+            }
+            if(velocity > 0){
+                   contact.setEnabled(false);
+                   if(!contact.isEnabled()){
+                       System.out.println("?!?");
+                   }
             }
         }
-
-        //and we need to disable contact when our "groundChecker" will collide with "ground" and we need to check what velocity.y of player body is, when it is bigger than 0 contact should be falsed
-        if (fixA.getUserData() == "player" || fixB.getUserData() == "player") {
-            Fixture feet = fixA.getUserData() == "player" ? fixA : fixB;
-            Fixture object2 = feet == fixA ? fixB : fixA;
-
-            if (object2.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object2.getUserData().getClass())) {
-               //((InteractiveTileObject) object2.getUserData()).onFeet();
-                contact.setEnabled(false);
-
-            }
-       }*/
 
     }
 
@@ -70,4 +51,7 @@ public class WorldContactListener implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }
+
+
+
 }
