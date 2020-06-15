@@ -58,7 +58,7 @@
   <object id="105" x="3360" y="192" width="16"/>
  </objectgroup>
  <objectgroup id="13" name="water" offsetx="0" offsety="2">
-  <object id="66" x="42.3333" y="207.935" width="630.797" height="-1.01585e-14"/>
+  <object id="66" x="-2.33333" y="207.935" width="675.463" height="-1.01585e-14"/>
   <object id="67" x="656.093" y="207.5" width="623.913" height="0.521739"/>
   <object id="68" x="1264" y="208" width="496"/>
   <object id="69" x="1760" y="208" width="16"/>

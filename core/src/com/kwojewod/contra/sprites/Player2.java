@@ -24,12 +24,15 @@ public class Player2 extends Sprite {
     private  Animation<TextureRegion> heroJump;
     private TextureRegion heroDown;
     private float stateTimer;
-    private  boolean runningRight;
+    public  boolean runningRight;
     private int widthOfSprite;
     public boolean playerIsDead;
+    private Array<Bullet> bullets;
+    private PlayScreen screen;
 
     public Player2(World world, PlayScreen screen) {
         super(screen.getAtlas().findRegion("NES_contra_heroes"));
+        this.screen = screen;
         this.world = world;
         currentState = Player.State.STANDING;
         previousState = Player.State.STANDING;
@@ -45,6 +48,7 @@ public class Player2 extends Sprite {
         definePlayer();
         setBounds(0,0, 22/ Contra.PPM,32/ Contra.PPM );
         setRegion(heroStand);
+        bullets = new Array<Bullet>();
     }
 
     private void loadHeroRun( Array<TextureRegion> frames){
@@ -142,7 +146,7 @@ public class Player2 extends Sprite {
 
     public void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(100 / Contra.PPM, 130 / Contra.PPM);
+        bdef.position.set(130 / Contra.PPM, 130 / Contra.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2Body = world.createBody(bdef);
 
@@ -161,9 +165,10 @@ public class Player2 extends Sprite {
         fdef.isSensor = true;
     }
 
-    public void fire() {
-       // super.fire();
-    }
+
+    public void fire(){
+            bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight ? true : false, null, this));
+        }
 
 
     public void isDead() {

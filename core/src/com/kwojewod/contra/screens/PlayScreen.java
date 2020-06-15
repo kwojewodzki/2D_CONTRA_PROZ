@@ -26,7 +26,7 @@ import com.kwojewod.contra.tools.WorldContactListener;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
-	 ArrayList<Bullet> bullets;
+
 	 boolean isMultiplayer;
 	//Game variable
 	private Contra game;
@@ -55,7 +55,6 @@ public class PlayScreen implements Screen {
 	private Music music;
 
 	public PlayScreen(Contra game, boolean multi) {
-		bullets = new ArrayList<Bullet>();
 		isMultiplayer = multi;
 		/*
 		Constructor for Contra class
@@ -79,7 +78,6 @@ public class PlayScreen implements Screen {
 		b2dr = new Box2DDebugRenderer();
 
 		new B2WorldCreator(world, map);
-
 		//Creating player
 		player = new Player(world, this);
 		if(isMultiplayer)
@@ -120,6 +118,9 @@ public class PlayScreen implements Screen {
 				if (player.b2Body.getLinearVelocity().y == 0)
 					player.b2Body.setLinearVelocity(new Vector2(0, 0));
 			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
+				player.fire();
+			}
 	}else {
 			/*
 			Player 1 input handling in MP
@@ -141,6 +142,9 @@ public class PlayScreen implements Screen {
 				if (player.b2Body.getLinearVelocity().y == 0)
 					player.b2Body.setLinearVelocity(new Vector2(0, 0));
 			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.O)){
+				player.fire();
+			}
 
 
 
@@ -161,9 +165,12 @@ public class PlayScreen implements Screen {
 				if (player2.b2Body.getLinearVelocity().y == 0)
 					player2.b2Body.setLinearVelocity(new Vector2(0, 0));
 			}
-			if(Gdx.input.isKeyPressed(Input.Keys.G)){
+			if(Gdx.input.isKeyPressed(Input.Keys.H)){
 				if (player2.b2Body.getLinearVelocity().y == 0)
 					player2.b2Body.applyLinearImpulse(new Vector2(0, 4), player.b2Body.getWorldCenter(), true);
+			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.G)){
+				player2.fire();
 			}
 
 		}
@@ -223,6 +230,8 @@ public class PlayScreen implements Screen {
 
 		game.batch.setProjectionMatrix(gamecam.combined);
 		game.batch.begin();
+
+
 
 		player.draw(game.batch);
 		if(isMultiplayer)

@@ -2,10 +2,7 @@ package com.kwojewod.contra.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -29,7 +26,7 @@ public class Player extends Sprite {
     private  Animation<TextureRegion> heroJump;
     private TextureRegion heroDown;
     private float stateTimer;
-    private  boolean runningRight;
+    public  boolean runningRight;
     private int widthOfSprite;
     public boolean isGrounded;
     private Array<Bullet> bullets;
@@ -38,6 +35,7 @@ public class Player extends Sprite {
     public Player(World world, PlayScreen screen){
         super(screen.getAtlas().findRegion("NES_contra_heroes"));
         this.world = world;
+        this.screen = screen;
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -52,6 +50,7 @@ public class Player extends Sprite {
         definePlayer();
         setBounds(0,0, 22/ Contra.PPM,32/ Contra.PPM );
         setRegion(heroStand);
+        bullets = new Array<Bullet>();
     }
     private void loadHeroRun( Array<TextureRegion> frames){
         int pos = 0;
@@ -95,6 +94,12 @@ public class Player extends Sprite {
             isDead();
         }
         setRegion(getFrame(dt));
+        for(Bullet  bullet : bullets) {
+            bullet.update(dt);
+            if(bullet.isDestroyed())
+                bullets.removeValue(bullet, true);
+        }
+
     }
 
     public TextureRegion getFrame(float dt){
@@ -174,7 +179,12 @@ public class Player extends Sprite {
         b2Body.createFixture(fdef).setUserData("feet");
     }
     public void fire(){
-       // bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight));
+        bullets.add(new Bullet(screen, b2Body.getPosition().x, b2Body.getPosition().y, runningRight ? true : false, this, null));
+    }
+    public void draw(Batch batch){
+        super.draw(batch);
+        for(Bullet bullet : bullets)
+            bullet.draw(batch);
     }
 
     public void isDead(){

@@ -14,38 +14,50 @@ import com.kwojewod.contra.screens.PlayScreen;
 
 
 public class Bullet extends Sprite {
-   /* PlayScreen screen;
+    PlayScreen screen;
     World world;
     Array<TextureRegion> frames;
+    private TextureRegion bullet;
     float stateTime;
     boolean destroyed;
     boolean setToDestroy;
     boolean fireRight;
     Animation fireAnimation;
+    Player player;
+    Player2 player2;
+    float x,y;
 
     Body b2body;
-    public Bullet(PlayScreen screen, float x, float y, boolean fireRight){
+    public Bullet(PlayScreen screen, float x, float y, boolean fireRight, Player player, Player2 player2){
+        this.player = player;
+        this.player2 = player2;
         this.fireRight = fireRight;
         this.screen = screen;
         this.world = screen.getWorld();
-        frames = new Array<TextureRegion>();
-           frames.add(new TextureRegion(screen.getAtlas().findRegion("bullet"), 0,0,4,4));
-          fireAnimation = new Animation(0.2f, frames);
-        setRegion((TextureRegion) fireAnimation.getKeyFrame(0));
-        setBounds(x, y, 6 / Contra.PPM, 6 / Contra.PPM);
+        bullet = new TextureRegion(screen.getAtlas().findRegion("NES_contra_heroes"), 444,621,4,5);
+        setBounds(x, y, 4 / Contra.PPM, 5 / Contra.PPM);
         defineBullet();
+
+
+
     }
 
     public void defineBullet(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(fireRight ? getX() + 12 /Contra.PPM : getX() - 12 /Contra.PPM, getY());
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        if(fireRight){
+            x = getX() + 12 /Contra.PPM;
+        }else {
+            x = getX() - 12 / Contra.PPM;
+        }
+        y =  getY() + 8/Contra.PPM;
+        bdef.position.set(x,y);
+        bdef.type = BodyDef.BodyType.KinematicBody;
         if(!world.isLocked())
             b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(3 / Contra.PPM);
+        shape.setRadius(2.5f / Contra.PPM);
         fdef.filter.categoryBits = Contra.BULLET_BIT;
         fdef.filter.maskBits = Contra.GROUND_BIT;
 
@@ -53,12 +65,22 @@ public class Bullet extends Sprite {
         fdef.restitution = 1;
         fdef.friction = 0;
         b2body.createFixture(fdef).setUserData(this);
-        b2body.setLinearVelocity(new Vector2(fireRight ? 2 : -2, 2.5f));
+        if(player != null) {
+            if (player.runningRight)
+                b2body.setLinearVelocity(new Vector2(2.5f, 0));
+            else
+                b2body.setLinearVelocity(new Vector2(-2.5f, 0));
+        }else{
+            if (player2.runningRight)
+                b2body.setLinearVelocity(new Vector2(2.5f, 0));
+            else
+                b2body.setLinearVelocity(new Vector2(-2.5f, 0));
+        }
     }
 
     public void update(float dt){
         stateTime += dt;
-        setRegion((TextureRegion) fireAnimation.getKeyFrame(stateTime, true));
+        setRegion(bullet);
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         if((stateTime > 3 || setToDestroy) && !destroyed) {
             world.destroyBody(b2body);
@@ -68,6 +90,11 @@ public class Bullet extends Sprite {
             b2body.setLinearVelocity(b2body.getLinearVelocity().x, 2f);
         if((fireRight && b2body.getLinearVelocity().x < 0) || (!fireRight && b2body.getLinearVelocity().x > 0))
             setToDestroy();
+
+
+    }
+    public void render(float dt){
+        //batch.draw(bullet, x, y);
     }
 
     public void setToDestroy(){
@@ -78,5 +105,4 @@ public class Bullet extends Sprite {
         return destroyed;
     }
 
- */
 }
