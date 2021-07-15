@@ -1,2 +1,2 @@
 # PROZ_Project
-  Prosta wersja gry "Contra". Projwkt na zaliczenie przedmiotu "Programowanie zdarzeniowe".
+  Prosta wersja gry "Contra". Projekt na zaliczenie przedmiotu "Programowanie zdarzeniowe".
